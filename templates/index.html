@@ -1,64 +1,81 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
+
 <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Safe Data Tool</title>
-    <style>
-        body {
-            background-color: #ffe4e1; /* light peach/pink */
-            font-family: Arial, sans-serif;
-            margin: 0;
-            padding: 0;
-        }
-        .container {
-            max-width: 600px;
-            margin: 50px auto;
-            background: white;
-            padding: 30px;
-            border-radius: 12px;
-            box-shadow: 0px 0px 15px #aaa;
-        }
-        h1 {
-            text-align: center;
-            color: #333;
-        }
-        label, select, input {
-            display: block;
-            width: 100%;
-            margin-top: 15px;
-            font-size: 16px;
-        }
-        button {
-            margin-top: 20px;
-            width: 100%;
-            padding: 10px;
-            background-color: #ff7f50; /* coral color */
-            border: none;
-            color: white;
-            font-size: 18px;
-            border-radius: 8px;
-            cursor: pointer;
-        }
-        button:hover {
-            background-color: #ff6347; /* darker coral */
-        }
-    </style>
+    <link rel="stylesheet" href="index.css">
 </head>
+
 <body>
+    <!-- Header Section -->
+    <div class="header">
+        <h1>Cyber-Eye</h1>
+        <p>Upload your CSV file and select a method to process sensitive data.</p>
+    </div>
+
+    <!-- Main Content Section -->
     <div class="container">
         <h1>Safe Data Tool</h1>
         <form action="/process" method="post" enctype="multipart/form-data">
-            <label>Select CSV file:</label>
-            <input type="file" name="file" required>
             
-            <label>Select method:</label>
-            <select name="method" required>
-                <option value="mask">Simple Masking</option>
-                <option value="encrypt">Encryption</option>
-                <option value="anonymize">Anonymisation</option>
-            </select>
-            
-            <button type="submit">Process File</button>
+                <label for="file" id="file-label">Select CSV file:</label>
+                <input type="file" id="file" name="file" accept=".csv,.xlsx" required>
+                
+                <label for="method">Select method:</label>
+                <select id="method" name="method" required>
+                    <option value="mask">Simple Masking</option>
+                    <option value="encrypt">Encryption</option>
+                    <option value="anonymize">Anonymisation</option>
+                </select>
+
+            <button type="submit" id="process-button">Process File</button>
         </form>
     </div>
+
+
+    <!-- Result File -->
+    <div class="result">
+        {% if result_file %}
+        <h2>Result File</h2>
+        <p>Your processed file is ready. Click the link below to download it:</p>
+        <a href="{{ url_for('download_file', filename=result_file) }}" class="download-link">Download Result File</a>
+        {% else %}
+        <p>No result file available.</p>
+        {% endif %}
 </body>
+
+<script>
+    const fileInput = document.getElementById('file');
+    const fileLabel = document.getElementById('file-label');
+    const processButton = document.getElementById('process-button');
+    const container = document.querySelector('.container');
+    const result = document.querySelector('.result');
+
+    if (fileInput) {
+        fileInput.addEventListener('change', function () {
+            if (fileInput.files && fileInput.files.length > 0) {
+                // Hide the file input
+                fileInput.style.display = "none";
+                fileInput.disabled = true;
+                // Display the selected file name in the label
+                fileLabel.textContent = "Selected file: " + fileInput.files[0].name;
+                fileLabel.classList.add("select");
+            }
+            else {
+                // Show the file input if no file is selected
+                fileInput.style.display = '';
+            }
+        });
+    }
+
+    if (processButton) {
+        processButton.addEventListener('click', function () {
+            container.style.display = "none"; // Hide the container
+            result.style.display = "block"; // Show the result section
+        });
+    }
+</script>
+
 </html>
