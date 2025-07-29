@@ -43,7 +43,8 @@ def process():
             return "Missing 'Name' column in the file.", 400
 
         # Encrypt the 'Name' column using AES
-        df['Name'] = df['Name'].apply(lambda x: cipher.encrypt(str(x).encode()).decode())
+        for col in df.columns:
+            df[col] = df[col].apply(lambda x: cipher.encrypt(str(x).encode()).decode())
 
         # Save processed file
         processed_filename = 'processed_' + filename
