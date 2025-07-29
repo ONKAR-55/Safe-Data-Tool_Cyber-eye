@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Safe Data Tool</title>
-    <link rel="stylesheet" href="index.css">
+    <link rel="stylesheet" href="../static/index.css">
 </head>
 
 <body>
@@ -33,20 +33,9 @@
             <button type="submit" id="process-button">Process File</button>
         </form>
     </div>
-
-
-    <!-- Result File -->
-    <div class="result">
-        {% if result_file %}
-        <h2>Result File</h2>
-        <p>Your processed file is ready. Click the link below to download it:</p>
-        <a href="{{ url_for('download_file', filename=result_file) }}" class="download-link">Download Result File</a>
-        {% else %}
-        <p>No result file available.</p>
-        {% endif %}
 </body>
 
-<script>
+<!-- <script>
     const fileInput = document.getElementById('file');
     const fileLabel = document.getElementById('file-label');
     const processButton = document.getElementById('process-button');
@@ -76,6 +65,6 @@
             result.style.display = "block"; // Show the result section
         });
     }
-</script>
+</script> -->
 
 </html>

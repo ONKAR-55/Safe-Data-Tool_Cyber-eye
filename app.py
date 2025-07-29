@@ -1,53 +1,63 @@
 from flask import Flask, render_template, request, send_from_directory
 import os
 import pandas as pd
-import matplotlib.pyplot as plt
+from cryptography.fernet import Fernet
+from flask import send_from_directory
 
 app = Flask(__name__)
 
-UPLOAD_FOLDER = 'uploads'
-PROCESSED_FOLDER = 'processed'
+# Directories
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+UPLOAD_FOLDER = os.path.join(BASE_DIR, 'uploads')
+PROCESSED_FOLDER = os.path.join(BASE_DIR, 'processed')
 os.makedirs(UPLOAD_FOLDER, exist_ok=True)
 os.makedirs(PROCESSED_FOLDER, exist_ok=True)
 
-@app.route('/')
+# Setup AES encryption
+key = Fernet.generate_key()
+cipher = Fernet(key)
+
+@app.route('/', methods=['GET'])
 def index():
     return render_template('index.html')
 
 @app.route('/process', methods=['POST'])
 def process():
-    file = request.files['file']
-    method = request.form['method']
+    if 'file' not in request.files:
+        return "No file uploaded", 400
 
-    filepath = os.path.join(UPLOAD_FOLDER, file.filename)
+    file = request.files['file']
+    method = request.form.get('method')
+
+    if method != 'encrypt':
+        return "Only encryption method is supported for now.", 400
+
+    filename = file.filename
+    filepath = os.path.join(UPLOAD_FOLDER, filename)
     file.save(filepath)
 
-    df = pd.read_csv(filepath)
+    try:
+        df = pd.read_csv(filepath)
 
-    if method == 'mask':
-        df['Name'] = df['Name'].apply(lambda x: 'XXX')
-    elif method == 'encrypt':
-        df['Name'] = df['Name'].apply(lambda x: ''.join(reversed(str(x))))
-    elif method == 'anonymize':
-        df['Name'] = 'Anonymous'
+        if 'Name' not in df.columns:
+            return "Missing 'Name' column in the file.", 400
 
-    processed_file = os.path.join(PROCESSED_FOLDER, 'processed_' + file.filename)
-    df.to_csv(processed_file, index=False)
+        # Encrypt the 'Name' column using AES
+        df['Name'] = df['Name'].apply(lambda x: cipher.encrypt(str(x).encode()).decode())
 
-    # Visualization
-    plt.figure()
-    df['Age'].value_counts().plot(kind='bar')
-    plt.title('Age Distribution')
-    plt.xlabel('Age')
-    plt.ylabel('Count')
-    plot_path = os.path.join('static', 'plot.png')
-    plt.savefig(plot_path)
-    plt.close()
+        # Save processed file
+        processed_filename = 'processed_' + filename
+        processed_path = os.path.join(PROCESSED_FOLDER, processed_filename)
+        df.to_csv(processed_path, index=False)
 
-    return render_template('result.html', plot_url=plot_path, filename='processed_' + file.filename)
+        # Pass result to template
+        return render_template('result.html', result_file=processed_filename)
+
+    except Exception as e:
+        return f"Error while processing: {str(e)}", 500
 
 @app.route('/download/<filename>')
-def download(filename):
+def download_file(filename):
     return send_from_directory(PROCESSED_FOLDER, filename, as_attachment=True)
 
 if __name__ == '__main__':

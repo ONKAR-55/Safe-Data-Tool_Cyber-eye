@@ -1,53 +1,16 @@
+<!-- templates/result.html -->
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <title>Processing Result</title>
-    <style>
-        body {
-            background-color: #ffe4e1;
-            font-family: Arial, sans-serif;
-            margin: 0;
-            padding: 0;
-        }
-        .container {
-            max-width: 600px;
-            margin: 50px auto;
-            background: white;
-            padding: 30px;
-            border-radius: 12px;
-            box-shadow: 0px 0px 15px #aaa;
-            text-align: center;
-        }
-        h2 {
-            color: #333;
-        }
-        a {
-            display: inline-block;
-            margin-top: 20px;
-            padding: 10px 15px;
-            background-color: #ff7f50;
-            color: white;
-            text-decoration: none;
-            font-size: 16px;
-            border-radius: 8px;
-        }
-        a:hover {
-            background-color: #ff6347;
-        }
-        img {
-            margin-top: 20px;
-            max-width: 100%;
-            border-radius: 8px;
-        }
-    </style>
+    <meta charset="UTF-8">
+    <title>Encryption Result</title>
+    <link rel="stylesheet" href="../static/result.css">
 </head>
 <body>
-    <div class="container">
-        <h2>Processed Successfully!</h2>
-        <a href="{{ url_for('download', filename=filename) }}">Download Processed File</a>
-        <div>
-            <img src="{{ plot_url }}" alt="Plot">
-        </div>
+    <div class="box">
+        <h1>✅ File Encrypted Successfully!</h1>
+        <p>Your encrypted file is ready to download:</p>
+        <a href="{{ url_for('download_file', filename=result_file) }}">Download Encrypted File</a>
     </div>
 </body>
 </html>
