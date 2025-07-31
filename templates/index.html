@@ -4,67 +4,216 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Safe Data Tool</title>
+    <title>Cyber-Eye - Safe Data Tool</title>
     <link rel="stylesheet" href="../static/index.css">
 </head>
 
 <body>
     <!-- Header Section -->
     <div class="header">
-        <h1>Cyber-Eye</h1>
-        <p>Upload your CSV file and select a method to process sensitive data.</p>
+        <h1>🛡️ Cyber-Eye</h1>
+        <p>Secure your sensitive data with advanced protection methods</p>
     </div>
 
     <!-- Main Content Section -->
     <div class="container">
-        <h1>Safe Data Tool</h1>
-        <form action="/process" method="post" enctype="multipart/form-data">
-            
-                <label for="file" id="file-label">Select CSV file:</label>
-                <input type="file" id="file" name="file" accept=".csv,.xlsx" required>
-                
-                <label for="method">Select method:</label>
+        <h1>Safe Data Processing</h1>
+        <form id="dataForm" action="/process" method="post" enctype="multipart/form-data">
+
+            <div class="form-group">
+                <label for="file">Upload Your Data File</label>
+                <div class="file-input-wrapper">
+                    <input type="file" id="file" name="file" accept=".csv,.xlsx" required>
+                    <label for="file" class="file-input-button">
+                        📁 Choose CSV or Excel File
+                    </label>
+                    <div class="file-name" id="fileName"></div>
+                </div>
+            </div>
+
+            <!-- Option for Protection Method -->
+            <div class="form-group">
+                <label for="method">Protection Method</label>
                 <select id="method" name="method" required>
-                    <option value="mask">Simple Masking</option>
-                    <option value="encrypt">Encryption</option>
-                    <option value="anonymize">Anonymisation</option>
+                    <option value="" disabled selected>Select a method</option>
+                    <option value="mask">🎭 Simple Masking</option>
+                    <option value="encrypt">🔐 Encryption</option>
+                    <option value="anonymize">👤 Anonymization</option>
+                    <option value="decrypt">🔓 Decryption</option>
                 </select>
 
-            <button type="submit" id="process-button">Process File</button>
+                <!-- Method Information -->
+                <div class="method-info" id="maskInfo">
+                    <strong>Simple Masking:</strong> Replaces sensitive characters with asterisks (*) while preserving
+                    data structure.
+                </div>
+                <div class="method-info" id="encryptInfo">
+                    <strong>Encryption:</strong> Uses advanced algorithms to secure your data with reversible
+                    protection.
+                </div>
+                <div class="method-info" id="anonymizeInfo">
+                    <strong>Anonymization:</strong> Permanently removes or alters identifying information for maximum
+                    privacy.
+                </div>
+                <div class="method-info" id="decryptInfo">
+                    <strong>Decryption:</strong> Reverses the encryption process to restore original data using a
+                    decryption key.
+                </div>
+            </div>
+
+            <!-- Decryption key handeling -->
+            <div class="form-group" id="keyInputGroup" >
+                <label for="decryptionkey">Enter The Decryption Key</label>
+                <input type="text,numbers" id="decryptionkey" name="decryption_key" placeholder="Enter decryption key">
+            </div>
+
+            <button type="submit" id="processButton">
+                <span class="button-text">🚀 Process Securely</span>
+                <div class="loading">
+                    <div class="spinner"></div>
+                </div>
+            </button>
+
+            <div class="progress-bar" id="progressBar">
+                <div class="progress-fill" id="progressFill"></div>
+            </div>
         </form>
+
+        <div class="security-badge">
+            <svg class="security-icon" fill="currentColor" viewBox="0 0 20 20">
+                <path fill-rule="evenodd" d="M10 1L5 4v5.5C5 15.43 8.43 19 10 19s5-3.57 5-9.5V4L10 1z"
+                    clip-rule="evenodd" />
+            </svg>
+            End-to-end encrypted processing
+        </div>
     </div>
+
+    <script>
+        // File input handling
+        const fileInput = document.getElementById('file');
+        const fileName = document.getElementById('fileName');
+        const methodSelect = document.getElementById('method');
+        const form = document.getElementById('dataForm');
+        const processButton = document.getElementById('processButton');
+        const buttonText = document.querySelector('.button-text');
+        const loading = document.querySelector('.loading');
+        const progressBar = document.getElementById('progressBar');
+        const progressFill = document.getElementById('progressFill');
+
+        fileInput.addEventListener('change', function (e) {
+            if (e.target.files.length > 0) {
+                const file = e.target.files[0];
+                fileName.textContent = `Selected: ${file.name} (${(file.size / 1024 / 1024).toFixed(2)} MB)`;
+                fileName.style.color = '#10b981';
+            } else {
+                fileName.textContent = '';
+            }
+        });
+
+        // Method selection info
+        methodSelect.addEventListener('change', function (e) {
+            // Hide all info divs
+            document.querySelectorAll('.method-info').forEach(info => {
+                info.classList.remove('active');
+            });
+
+            // Show selected method info
+            if (e.target.value) {
+                const infoDiv = document.getElementById(e.target.value + 'Info');
+                if (infoDiv) {
+                    infoDiv.classList.add('active');
+                }
+            }
+        });
+
+        // Form submission with loading state
+        form.addEventListener('submit', function (e) {
+            form.submit();
+
+            // Show loading state
+            processButton.disabled = true;
+            buttonText.style.opacity = '0';
+            loading.style.display = 'block';
+            progressBar.style.display = 'block';
+
+            // Simulate progress
+            let progress = 0;
+            const progressInterval = setInterval(() => {
+                progress += Math.random() * 15;
+                if (progress > 90) progress = 90;
+                progressFill.style.width = progress + '%';
+            }, 200);
+
+            // Simulate form submission (replace with actual submission)
+            setTimeout(() => {
+                clearInterval(progressInterval);
+                progressFill.style.width = '100%';
+
+                setTimeout(() => {
+                    // Reset form state
+                    clearInterval(progressInterval);
+                    progressFill.style.width = '100%';
+
+                    setTimeout(() => {
+                        form.submit();
+                    })
+                    alert('Processing complete!');
+                }, 500);
+            }, 3000);
+        });
+
+        // Drag and drop functionality
+        const container = document.querySelector('.container');
+
+        ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
+            container.addEventListener(eventName, preventDefaults, false);
+        });
+
+        function preventDefaults(e) {
+            e.preventDefault();
+            e.stopPropagation();
+        }
+
+        ['dragenter', 'dragover'].forEach(eventName => {
+            container.addEventListener(eventName, highlight, false);
+        });
+
+        ['dragleave', 'drop'].forEach(eventName => {
+            container.addEventListener(eventName, unhighlight, false);
+        });
+
+        function highlight(e) {
+            container.style.background = 'rgba(102, 126, 234, 0.1)';
+            container.style.borderColor = '#667eea';
+        }
+
+        function unhighlight(e) {
+            container.style.background = 'rgba(255, 255, 255, 0.95)';
+            container.style.borderColor = 'rgba(255, 255, 255, 0.2)';
+        }
+
+        container.addEventListener('drop', handleDrop, false);
+
+        function handleDrop(e) {
+            const dt = e.dataTransfer;
+            const files = dt.files;
+
+            if (files.length > 0) {
+                fileInput.files = files;
+                fileInput.dispatchEvent(new Event('change'));
+            }
+        }
+
+        methodSelect.addEventListener('change', function() {
+            const selectedMethod = methodSelect.value;
+            if (selectedMethod === 'decrypt') {
+                keyInputGroup.style.display = 'block';
+            } else {
+                keyInputGroup.style.display = 'none';
+            }
+        });
+
+    </script>
 </body>
-
-<!-- <script>
-    const fileInput = document.getElementById('file');
-    const fileLabel = document.getElementById('file-label');
-    const processButton = document.getElementById('process-button');
-    const container = document.querySelector('.container');
-    const result = document.querySelector('.result');
-
-    if (fileInput) {
-        fileInput.addEventListener('change', function () {
-            if (fileInput.files && fileInput.files.length > 0) {
-                // Hide the file input
-                fileInput.style.display = "none";
-                fileInput.disabled = true;
-                // Display the selected file name in the label
-                fileLabel.textContent = "Selected file: " + fileInput.files[0].name;
-                fileLabel.classList.add("select");
-            }
-            else {
-                // Show the file input if no file is selected
-                fileInput.style.display = '';
-            }
-        });
-    }
-
-    if (processButton) {
-        processButton.addEventListener('click', function () {
-            container.style.display = "none"; // Hide the container
-            result.style.display = "block"; // Show the result section
-        });
-    }
-</script> -->
 
 </html>

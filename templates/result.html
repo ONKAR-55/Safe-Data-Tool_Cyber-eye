@@ -1,16 +1,121 @@
-<!-- templates/result.html -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Encryption Result</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cyber-Eye - Processing Complete</title>
     <link rel="stylesheet" href="../static/result.css">
 </head>
 <body>
-    <div class="box">
-        <h1>✅ File Encrypted Successfully!</h1>
-        <p>Your encrypted file is ready to download:</p>
-        <a href="{{ url_for('download_file', filename=result_file) }}">Download Encrypted File</a>
+    <div class="bg-animation">
+        <div class="floating-shape shape1"></div>
+        <div class="floating-shape shape2"></div>
+        <div class="floating-shape shape3"></div>
     </div>
+
+    <div class="box">
+        <div class="success-icon">
+            ✅
+        </div>
+        
+        <h1>Processing Complete!</h1>
+        <p class="subtitle">Your file has been successfully secured using advanced protection methods</p>
+        
+        <!-- Demo stats - replace with actual data -->
+        <div class="stats-grid">
+            <div class="stat-card">
+                <div class="stat-number">256</div>
+                <div class="stat-label">Bit Encryption</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number">100%</div>
+                <div class="stat-label">Data Protected</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number">2.4</div>
+                <div class="stat-label">MB Processed</div>
+            </div>
+        </div>
+        
+        <div class="download-section">
+            <a href="{{ url_for('download_file', filename=result_file) }}" class="download-btn">
+                <svg width="20" height="20" fill="currentColor" viewBox="0 0 20 20">
+                    <path fill-rule="evenodd" d="M3 17a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm3.293-7.707a1 1 0 011.414 0L9 10.586V3a1 1 0 112 0v7.586l1.293-1.293a1 1 0 111.414 1.414l-3 3a1 1 0 01-1.414 0l-3-3a1 1 0 010-1.414z" clip-rule="evenodd"/>
+                </svg>
+                Download Protected File
+            </a>
+        </div>
+
+        <!-- Conditional key container - only show if decryption key exists -->
+        {% if decryption_key %}
+        <div class="key-container" id="keyContainer">
+            <div class="key-header">
+                <svg width="24" height="24" fill="currentColor" viewBox="0 0 20 20">
+                    <path fill-rule="evenodd" d="M18 8a6 6 0 01-7.743 5.743L10 14l-1 1-1 1H6v2H2v-4l4.257-4.257A6 6 0 1118 8zm-6-4a1 1 0 100 2 2 2 0 012 2 1 1 0 102 0 4 4 0 00-4-4z" clip-rule="evenodd"/>
+                </svg>
+                <h3>Your Decryption Key</h3>
+            </div>
+            
+            <div class="key-display" id="keyDisplay">
+                {{ decryption_key }}
+            </div>
+            
+            <button class="copy-btn" onclick="copyKey()">
+                📋 Copy Key
+            </button>
+            
+            <div class="warning">
+                <svg width="20" height="20" fill="currentColor" viewBox="0 0 20 20">
+                    <path fill-rule="evenodd" d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z" clip-rule="evenodd"/>
+                </svg>
+                Save this key securely — you'll need it to decrypt your file
+            </div>
+        </div>
+        {% endif %}
+        
+        <a href="/" class="back-btn">
+            <svg width="16" height="16" fill="currentColor" viewBox="0 0 20 20">
+                <path fill-rule="evenodd" d="M9.707 16.707a1 1 0 01-1.414 0l-6-6a1 1 0 010-1.414l6-6a1 1 0 011.414 1.414L5.414 9H17a1 1 0 110 2H5.414l4.293 4.293a1 1 0 010 1.414z" clip-rule="evenodd"/>
+            </svg>
+            Process Another File
+        </a>
+    </div>
+
+    <div class="toast" id="toast">Key copied to clipboard!</div>
+
+    <script>
+        function copyKey() {
+            const keyDisplay = document.getElementById('keyDisplay');
+            if (keyDisplay) {
+                const keyText = keyDisplay.textContent;
+                navigator.clipboard.writeText(keyText).then(() => {
+                    showToast();
+                }).catch(err => {
+                    console.error('Failed to copy: ', err);
+                    // Fallback for older browsers
+                    const textArea = document.createElement('textarea');
+                    textArea.value = keyText;
+                    document.body.appendChild(textArea);
+                    textArea.select();
+                    document.execCommand('copy');
+                    document.body.removeChild(textArea);
+                    showToast();
+                });
+            }
+        }
+
+        function showToast() {
+            const toast = document.getElementById('toast');
+            toast.classList.add('show');
+            setTimeout(() => {
+                toast.classList.remove('show');
+            }, 3000);
+        }
+
+        // Animate elements on load
+        window.addEventListener('load', () => {
+            // Add any additional load animations here
+        });
+    </script>
 </body>
 </html>

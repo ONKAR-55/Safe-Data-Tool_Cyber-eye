@@ -1,31 +1,406 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
 body {
-    font-family: Arial, sans-serif;
-    background-color: #f0f8ff;
-    text-align: center;
-    padding: 40px;
-    align-items: center;
-    justify-content: center;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    line-height: 1.6;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    min-height: 100vh;
     display: flex;
     flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    position: relative;
+    overflow: hidden;
+}
+
+/* Animated background elements */
+.bg-animation {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: -1;
+}
+
+.floating-shape {
+    position: absolute;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.1);
+    animation: float 6s ease-in-out infinite;
+}
+
+.shape1 {
+    width: 80px;
+    height: 80px;
+    top: 20%;
+    left: 10%;
+    animation-delay: 0s;
+}
+
+.shape2 {
+    width: 120px;
+    height: 120px;
+    top: 60%;
+    right: 15%;
+    animation-delay: 2s;
+}
+
+.shape3 {
+    width: 60px;
+    height: 60px;
+    bottom: 20%;
+    left: 20%;
+    animation-delay: 4s;
 }
 
 .box {
-    background: #ffffff;
-    padding: 30px;
-    border-radius: 10px;
-    box-shadow: 0px 0px 15px #aaa;
-    display: inline-block;
+    background: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(15px);
+    border-radius: 25px;
+    padding: 3rem;
+    box-shadow: 0 25px 50px rgba(0, 0, 0, 0.15);
+    width: 100%;
+    max-width: 700px;
+    text-align: center;
+    animation: slideInUp 0.8s ease-out;
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    position: relative;
+    overflow-y: auto;
+    max-height: 90vh;
 }
 
-a {
-    text-decoration: none;
-    background-color: #007bff;
+.success-icon {
+    width: 80px;
+    height: 80px;
+    margin: 0 auto 2rem;
+    background: linear-gradient(135deg, #10b981, #34d399);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 2.5rem;
+    animation: bounceIn 1s ease-out 0.3s both;
+    box-shadow: 0 10px 30px rgba(16, 185, 129, 0.3);
+}
+
+h1 {
+    color: #1f2937;
+    font-size: 2.5rem;
+    font-weight: 700;
+    margin-bottom: 1rem;
+    animation: fadeIn 0.8s ease-out 0.5s both;
+}
+
+.subtitle {
+    color: #6b7280;
+    font-size: 1.2rem;
+    margin-bottom: 2.5rem;
+    animation: fadeIn 0.8s ease-out 0.7s both;
+}
+
+.download-section {
+    margin: 2rem 0;
+    animation: fadeIn 0.8s ease-out 0.9s both;
+}
+
+.download-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 1rem 2rem;
+    background: linear-gradient(135deg, #667eea, #764ba2);
     color: white;
-    padding: 10px 20px;
-    border-radius: 6px;
-    font-size: 16px;
+    text-decoration: none;
+    border-radius: 15px;
+    font-size: 1.1rem;
+    font-weight: 600;
+    transition: all 0.3s ease;
+    box-shadow: 0 10px 25px rgba(102, 126, 234, 0.3);
+    position: relative;
+    overflow: hidden;
 }
 
-a:hover {
-    background-color: #0056b3;
+.download-btn:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 15px 35px rgba(102, 126, 234, 0.4);
+}
+
+.download-btn:active {
+    transform: translateY(-1px);
+}
+
+.download-btn::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+    transition: left 0.5s;
+}
+
+.download-btn:hover::before {
+    left: 100%;
+}
+
+.key-container {
+    background: linear-gradient(135deg, #fef3c7, #fbbf24);
+    border: 2px solid #f59e0b;
+    border-radius: 20px;
+    padding: 2rem;
+    margin-top: 2.5rem;
+    animation: slideInUp 0.8s ease-out 1.1s both;
+    position: relative;
+    overflow: hidden;
+}
+
+.key-container::before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: radial-gradient(circle, rgba(255, 255, 255, 0.1) 0%, transparent 70%);
+    animation: rotate 10s linear infinite;
+}
+
+.key-header {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    margin-bottom: 1.5rem;
+}
+
+.key-container h3 {
+    color: #92400e;
+    font-size: 1.3rem;
+    font-weight: 700;
+    margin: 0;
+}
+
+.key-display {
+    background: rgba(255, 255, 255, 0.9);
+    border: 2px dashed #f59e0b;
+    border-radius: 12px;
+    padding: 1.5rem;
+    margin: 1rem 0;
+    font-family: 'Courier New', monospace;
+    font-size: 0.95rem;
+    word-break: break-all;
+    color: #374151;
+    line-height: 1.8;
+    position: relative;
+    z-index: 1;
+}
+
+.copy-btn {
+    background: #f59e0b;
+    color: white;
+    border: none;
+    padding: 0.75rem 1.5rem;
+    border-radius: 10px;
+    font-size: 0.9rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    margin-top: 1rem;
+    position: relative;
+    z-index: 1;
+}
+
+.copy-btn:hover {
+    background: #d97706;
+    transform: translateY(-2px);
+}
+
+.warning {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    color: #dc2626;
+    font-weight: 600;
+    margin-top: 1.5rem;
+    padding: 1rem;
+    background: rgba(220, 38, 38, 0.1);
+    border-radius: 10px;
+    border: 1px solid rgba(220, 38, 38, 0.2);
+    position: relative;
+    z-index: 1;
+}
+
+.stats-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    gap: 1.5rem;
+    margin: 2rem 0;
+    animation: fadeIn 0.8s ease-out 1.3s both;
+}
+
+.stat-card {
+    background: rgba(255, 255, 255, 0.8);
+    border-radius: 15px;
+    padding: 1.5rem;
+    text-align: center;
+    border: 1px solid rgba(102, 126, 234, 0.2);
+}
+
+.stat-number {
+    font-size: 2rem;
+    font-weight: 700;
+    color: #667eea;
+    margin-bottom: 0.5rem;
+}
+
+.stat-label {
+    color: #6b7280;
+    font-size: 0.9rem;
+    font-weight: 500;
+}
+
+.back-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.75rem 1.5rem;
+    background: rgba(107, 114, 128, 0.1);
+    color: #374151;
+    text-decoration: none;
+    border-radius: 12px;
+    font-size: 1rem;
+    font-weight: 500;
+    transition: all 0.3s ease;
+    margin-top: 2rem;
+    border: 1px solid rgba(107, 114, 128, 0.2);
+}
+
+.back-btn:hover {
+    background: rgba(107, 114, 128, 0.2);
+    transform: translateY(-2px);
+}
+
+.toast {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    background: #10b981;
+    color: white;
+    padding: 1rem 1.5rem;
+    border-radius: 10px;
+    box-shadow: 0 10px 25px rgba(16, 185, 129, 0.3);
+    transform: translateX(400px);
+    opacity: 0;
+    transition: all 0.3s ease;
+    z-index: 1000;
+}
+
+.toast.show {
+    transform: translateX(0);
+    opacity: 1;
+}
+
+@keyframes slideInUp {
+    from {
+        opacity: 0;
+        transform: translateY(50px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+
+    to {
+        opacity: 1;
+    }
+}
+
+@keyframes bounceIn {
+    0% {
+        opacity: 0;
+        transform: scale(0.3);
+    }
+
+    50% {
+        opacity: 1;
+        transform: scale(1.1);
+    }
+
+    100% {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+@keyframes float {
+
+    0%,
+    100% {
+        transform: translateY(0px);
+    }
+
+    50% {
+        transform: translateY(-20px);
+    }
+}
+
+@keyframes rotate {
+    0% {
+        transform: rotate(0deg);
+    }
+
+    100% {
+        transform: rotate(360deg);
+    }
+}
+
+@media (max-width: 768px) {
+    .box {
+        padding: 2rem;
+        margin: 1rem;
+    }
+
+    h1 {
+        font-size: 2rem;
+    }
+
+    .stats-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .key-display {
+        font-size: 0.85rem;
+        padding: 1rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .box {
+        padding: 1.5rem;
+    }
+
+    h1 {
+        font-size: 1.8rem;
+    }
+
+    .success-icon {
+        width: 60px;
+        height: 60px;
+        font-size: 2rem;
+    }
 }
